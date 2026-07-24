@@ -55,3 +55,15 @@ def investable(cfg, returns_daily):
     from fbpo.data import investable_mask
 
     return investable_mask(returns_daily, cfg.estimation.window)
+@pytest.fixture(scope="session")
+def signals_monthly(cfg):
+    from fbpo.signals import load_signals
+
+    return load_signals(cfg)
+
+
+@pytest.fixture(scope="session")
+def signals_unlagged(cfg):
+    from fbpo.signals import build_unlagged_panel
+
+    return build_unlagged_panel(cfg)
