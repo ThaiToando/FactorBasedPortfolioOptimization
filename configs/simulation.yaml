@@ -1,0 +1,19 @@
+# Monte Carlo estimation-noise study. Overrides only.
+seed: 42
+
+forecast:
+  model: svr
+  min_train_months: 60
+  tune: false                       # 1000 paths x GridSearchCV is not a good trade
+  refit_every: 12
+  cv_splits: 4
+  embargo_months: 1
+  campbell_thompson: true
+  shrink_omega: 1.0
+  target: market_excess_monthly
+
+simulation:
+  n_paths: 1000
+  block_length_days: 21
+  bootstrap: stationary
+  mean_perturbation_sigma: [0.0, 0.01, 0.02, 0.05]

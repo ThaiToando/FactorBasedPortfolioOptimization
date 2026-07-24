@@ -1,0 +1,23 @@
+# Monthly-refresh configuration. NEVER touches configs/base.yaml: the headline
+# numbers the README cites are immutable artifacts of the v1.0.0 tag.
+# Overrides only; everything unstated inherits the base defaults.
+seed: 42
+
+data:
+  universe: dow30_static_2021
+  price_start: "2008-06-02"
+  price_end: "today"                # resolved at fetch time
+  signal_start: "2003-01-31"
+  signal_set: signals_auto          # 13 signals, zero manual workbooks -> runs unattended in CI
+  market_source: french
+  auto_adjust: true
+  trading_days_per_year: 252
+
+backtest:
+  first_rebalance: "2009-12-31"
+  last_rebalance: "today"
+  frequency: monthly
+  expected_rebalances: null         # derived, not asserted, on a growing sample
+  intramonth_rebalancing: false
+  return_type_estimation: log
+  return_type_compounding: simple
