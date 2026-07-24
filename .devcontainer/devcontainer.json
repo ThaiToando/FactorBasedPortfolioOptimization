@@ -1,0 +1,21 @@
+{
+  "name": "fbpo",
+  "image": "mcr.microsoft.com/devcontainers/python:3.11",
+  "features": { "ghcr.io/va-h/devcontainers-features/uv:1": {} },
+  "postCreateCommand": "uv sync --all-extras && uv run pre-commit install",
+  "containerEnv": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "PYTHONHASHSEED": "0"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": ["ms-python.python", "charliermarsh.ruff", "ms-toolsai.jupyter"],
+      "settings": {
+        "python.defaultInterpreterPath": "/workspaces/FactorBasedPO/.venv/bin/python"
+      }
+    }
+  }
+}
