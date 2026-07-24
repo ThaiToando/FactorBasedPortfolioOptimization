@@ -1,0 +1,39 @@
+{
+  "artifacts": {
+    "ff_factors_daily.parquet": {
+      "bytes": 53386,
+      "cols": 4,
+      "end": "2022-01-03 00:00:00",
+      "rows": 3423,
+      "sha256": "0aa71ea253f2fef61c252c2586e129b48ea441e914208496e6f5777d05feaad5",
+      "start": "2008-06-02 00:00:00"
+    },
+    "market_daily.parquet": {
+      "bytes": 41139,
+      "cols": 2,
+      "end": "2022-01-03 00:00:00",
+      "rows": 3422,
+      "sha256": "b8b5fcb85c0d50942293313aa3a6d3dc4fa73b90f69e3089d9a71827d6bd58ad",
+      "start": "2008-06-03 00:00:00"
+    },
+    "prices_ohlcv.parquet": {
+      "bytes": 4204036,
+      "cols": 145,
+      "end": "2022-01-03 00:00:00",
+      "rows": 3423,
+      "sha256": "36f39503de42dc32f4eb7626973ea4b736a9719e8ebf6905e288bd26f720ac4c",
+      "start": "2008-06-02 00:00:00"
+    },
+    "returns_daily.parquet": {
+      "bytes": 960244,
+      "cols": 29,
+      "end": "2022-01-03 00:00:00",
+      "rows": 3422,
+      "sha256": "528eca1da9bef643894b43a1f3ef2199dd85db4ae1bd4ab6dd0ac34c15b0eaa7",
+      "start": "2008-06-03 00:00:00"
+    }
+  },
+  "config_hash": "43c9ce2e",
+  "generated_utc": "2026-07-24T09:07:25+00:00",
+  "universe": "dow30_static_2021"
+}

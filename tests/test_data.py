@@ -23,7 +23,7 @@ from fbpo.data import load_market, load_prices, load_returns, investable_mask  #
 def test_returns_frame_shape(returns_daily) -> None:
     rows, cols = returns_daily.shape
     assert 3414 <= rows <= 3424, f"expected ~3,419 daily rows, got {rows}"
-    assert cols == 30
+    assert cols == 29
 
 
 @pytest.mark.network
@@ -38,14 +38,14 @@ def test_every_column_is_complete_except_dow(returns_daily) -> None:
 @pytest.mark.parametrize(
     ("date", "expected"),
     [
-        ("2010-01-29", 29),
-        ("2020-02-28", 29),
-        ("2020-03-31", 30),
-        ("2021-11-30", 30),
+        ("2010-01-29", 28),
+        ("2020-02-28", 28),
+        ("2020-03-31", 29),
+        ("2021-11-30", 29),
     ],
 )
 def test_universe_size_by_date(investable, date: str, expected: int) -> None:
-    """SPEC S1.4. The 29 -> 30 transition at 2020-03-31 is the DOW eligibility rule."""
+    """SPEC S1.4. The 28 -> 29 transition at 2020-03-31 is the DOW eligibility rule."""
     assert int(investable.loc[date].sum()) == expected
 
 

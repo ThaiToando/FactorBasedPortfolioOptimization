@@ -2,6 +2,9 @@ name: dow30_static_2021
 as_of: "2021-12-31"
 source: "S&P Dow Jones Indices, DJIA constituent list"
 # Carries survivorship bias by construction; disclosed in docs/deviations.md.
+# DEVIATION: WBA excluded -- delisted from Nasdaq 2025-08-29 (Sycamore take-private).
+# No free source serves dividend-adjusted history as of 2026-07. See docs/deviations.md.
+# Investable universe: 28 assets before 2020-03, 29 from 2020-03-31 onward.
 tickers:
   - AAPL   # Apple
   - AMGN   # Amgen
@@ -31,5 +34,4 @@ tickers:
   - UNH    # UnitedHealth
   - V      # Visa
   - VZ     # Verizon
-  - WBA    # Walgreens Boots Alliance
   - WMT    # Walmart

@@ -21,3 +21,37 @@ def repo_root() -> Path:
 @pytest.fixture(scope="session")
 def configs_dir(repo_root: Path) -> Path:
     return repo_root / "configs"
+
+@pytest.fixture(scope="session")
+def cfg():
+    from fbpo.config import Config
+
+    return Config()
+
+
+@pytest.fixture(scope="session")
+def raw_prices(cfg):
+    from fbpo.data import fetch_prices
+
+    return fetch_prices(cfg)
+
+
+@pytest.fixture(scope="session")
+def returns_daily(cfg):
+    from fbpo.data import load_returns
+
+    return load_returns(cfg)
+
+
+@pytest.fixture(scope="session")
+def market_daily(cfg):
+    from fbpo.data import load_market
+
+    return load_market(cfg)
+
+
+@pytest.fixture(scope="session")
+def investable(cfg, returns_daily):
+    from fbpo.data import investable_mask
+
+    return investable_mask(returns_daily, cfg.estimation.window)

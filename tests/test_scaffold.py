@@ -30,7 +30,7 @@ REQUIRED_FILES = [
 EXPECTED_DOW30 = {
     "AAPL", "AMGN", "AXP", "BA", "CAT", "CRM", "CSCO", "CVX", "DIS", "DOW",
     "GS", "HD", "HON", "IBM", "INTC", "JNJ", "JPM", "KO", "MCD", "MMM",
-    "MRK", "MSFT", "NKE", "PG", "TRV", "UNH", "V", "VZ", "WBA", "WMT",
+    "MRK", "MSFT", "NKE", "PG", "TRV", "UNH", "V", "VZ", "WMT",
 }
 
 
@@ -44,8 +44,8 @@ def test_universe_is_exactly_the_2021_djia(configs_dir: Path) -> None:
         (configs_dir / "universes" / "dow30_static_2021.yaml").read_text(encoding="utf-8")
     )
     tickers = spec["tickers"]
-    assert len(tickers) == 30
-    assert len(set(tickers)) == 30
+    assert len(tickers) == 29
+    assert len(set(tickers)) == 29
     assert all(t == t.upper() and t.isalpha() for t in tickers)
     assert set(tickers) == EXPECTED_DOW30
     assert spec["as_of"] == "2021-12-31"
