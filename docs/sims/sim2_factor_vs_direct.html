@@ -1,0 +1,133 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Simulation 2 — Factor structure versus direct estimation</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lm-webfont@0.5.0/latinmodern-roman.css">
+<style>
+body{background:#fff;color:#111;
+  font-family:"Latin Modern Roman","Computer Modern Roman",
+    "Nimbus Roman","Times New Roman",Times,serif;
+  font-size:17px;line-height:1.5;margin:0;padding:56px 0 90px;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;}
+.paper{max-width:640px;margin:0 auto;padding:0 28px;}
+.titleblock{text-align:center;margin-bottom:26px;}
+.titleblock .kicker{font-size:15px;font-style:italic;color:#333;margin-bottom:10px;}
+h1.title{font-size:25px;font-weight:400;line-height:1.25;margin:0 0 10px;}
+.byline{font-size:15px;color:#333;font-style:italic;}
+.byline .date{font-style:normal;color:#555;}
+hr.top{border:0;border-top:0.5px solid #111;margin:22px auto;width:88%;}
+.abstract{font-size:15px;line-height:1.5;margin:0 auto 26px;max-width:88%;
+  text-align:justify;}
+.abstract b{font-weight:700;}
+h2.section{font-size:17px;font-weight:700;margin:26px 0 8px;font-variant:normal;}
+.secnum{margin-right:.5em;}
+p{text-align:justify;margin:12px 0;}
+.controls{display:flex;gap:26px;flex-wrap:wrap;align-items:flex-end;
+  margin:18px 0 10px;font-size:14px;}
+.ctl label{display:block;color:#333;font-style:italic;margin-bottom:5px;font-size:13.5px;}
+.ctl output{color:#111;font-weight:700;margin-left:6px;
+  font-family:"Latin Modern Roman",Times,serif;}
+input[type=range]{width:190px;accent-color:#7a1d10;vertical-align:middle;}
+.stat{display:flex;gap:34px;flex-wrap:wrap;margin:16px 0 6px;
+  border-top:0.5px solid #ccc;border-bottom:0.5px solid #ccc;padding:10px 0;}
+.stat .k{font-size:12.5px;color:#555;font-style:italic;}
+.stat .v{font-size:23px;font-weight:400;
+  font-family:"Latin Modern Roman",Times,serif;}
+.panels{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:14px 0;}
+.panel{border:0.5px solid #bbb;padding:6px;}
+.panel.wide{grid-column:1/-1;}
+.phead{text-align:center;font-style:italic;font-size:13.5px;margin-bottom:2px;}
+.phead.d{color:#4E6E8E;}.phead.f{color:#7a1d10;}
+.pnum{text-align:center;font-size:27px;
+  font-family:"Latin Modern Roman",Times,serif;}
+.psub{text-align:center;font-size:12.5px;color:#555;font-style:italic;}
+.caption{font-size:14px;text-align:center;margin:8px auto 4px;max-width:92%;}
+.caption b{font-weight:700;}
+.discussion{font-size:15px;}
+.eq{font-style:italic;}
+sub{font-size:.75em;}
+footer{font-size:12.5px;color:#777;margin-top:34px;font-style:italic;
+  text-align:center;border-top:0.5px solid #ccc;padding-top:12px;}
+svg{width:100%;height:auto;display:block;
+  font-family:"Latin Modern Roman",Times,serif;}
+@media(max-width:680px){.panels{grid-template-columns:1fr;}}
+</style></head><body><div class="paper">
+<div class="titleblock">
+  <div class="kicker">Interactive Simulation 2</div>
+  <h1 class="title">Factor structure versus direct estimation</h1>
+  <div class="byline">A reproduction of Auh &amp; Cho (2023) &nbsp;·&nbsp; <span class="date">Economics Letters 228, 111137</span></div>
+</div>
+<hr class="top">
+<p class="abstract"><b>Abstract.</b> The contribution of Auh and Cho (2023) is a change in what one estimates. Direct estimation fits <span class="eq">N</span> expected returns, each from a short and noisy sample. The factor approach fits a single market premium and projects it through betas, which are persistent and estimated far more precisely. This note runs both methods on the same synthetic universe out of sample. As the number of assets grows or the estimation window shortens, direct estimation degrades while the factor approach holds.</p>
+<div class="controls">
+  <div class="ctl"><label>Number of assets N</label><input id="N" type="range" min="5" max="60" value="29" step="1"><output id="Nv">29</output></div>
+  <div class="ctl"><label>Estimation window T (days)</label><input id="T" type="range" min="63" max="756" value="252" step="21"><output id="Tv">252</output></div>
+  <div class="ctl"><label>Trials averaged</label><input id="M" type="range" min="20" max="200" value="80" step="20"><output id="Mv">80</output></div>
+</div>
+<div class="panels">
+  <div class="panel"><div class="phead d">Direct estimation</div><div class="pnum" id="dsr">&mdash;</div><div class="psub">out-of-sample Sharpe; estimates <span id="dpar">N</span> means</div></div>
+  <div class="panel"><div class="phead f">Factor structure</div><div class="pnum" id="fsr">&mdash;</div><div class="psub">out-of-sample Sharpe; estimates one premium and &beta;</div></div>
+</div>
+<div class="panels"><div class="panel wide"><svg id="curve" viewBox="0 0 640 320"></svg></div></div>
+<p class="caption"><b>Figure 1.</b> Out-of-sample Sharpe ratio as the universe grows, averaged over independent trials. Both methods use the same optimizer and covariance; only the expected-return input differs.</p>
+<h2 class="section"><span class="secnum">1.</span>Discussion</h2>
+<p class="discussion">The parameter count is the whole story. Direct estimation fits <span class="eq">N</span> free means; the factor model fits one premium and <span class="eq">N</span> betas, but betas are far easier to estimate than means (Merton, 1980), so the effective noise is much lower. The empirical reproduction found the factor strategies earning roughly three percent annual alpha at one-fifth the concentration of direct estimation — the empirical shadow of this simulation.</p>
+<footer>This simulation runs entirely in the browser with no external computation. For research and educational use only; not investment advice.</footer>
+</div>
+<script>
+const INK="#1A1A1A",BRICK="#B5341A",SLATE="#4E6E8E",GREY="#9A9A9A",GRID="#E4E4E4",NS="http://www.w3.org/2000/svg";
+function rng(s){return function(){s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function gauss(r){let u=0,v=0;while(!u)u=r();while(!v)v=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);}
+function trial(N,T,seed){const r=rng(seed);const beta=[],idio=[];const prem=0.0003,mv=0.010;
+  for(let i=0;i<N;i++){beta.push(0.7+Math.abs(gauss(r))*0.5);idio.push(0.008+Math.abs(gauss(r))*0.004);}
+  const trueMu=beta.map(b=>b*prem);
+  const mkt=[];for(let d=0;d<T;d++)mkt.push(gauss(r)*mv+prem);
+  const R=[];for(let i=0;i<N;i++){const row=[];for(let d=0;d<T;d++)row.push(beta[i]*mkt[d]+gauss(r)*idio[i]);R.push(row);}
+  const muDir=R.map(row=>row.reduce((a,b)=>a+b,0)/T);
+  const mbar=mkt.reduce((a,b)=>a+b,0)/T;let vm=0;for(let d=0;d<T;d++)vm+=(mkt[d]-mbar)**2;vm/=T;
+  const muFac=[];for(let i=0;i<N;i++){let cov=0,rb=R[i].reduce((a,b)=>a+b,0)/T;
+    for(let d=0;d<T;d++)cov+=(R[i][d]-rb)*(mkt[d]-mbar);cov/=T;muFac.push((cov/vm)*mbar);}
+  const vol=beta.map((b,i)=>Math.sqrt(b*b*mv*mv+idio[i]*idio[i]));
+  function opt(mu){let w=new Array(N).fill(1/N);
+    for(let it=0;it<250;it++){let a=0,vv=0;for(let i=0;i<N;i++){a+=mu[i]*w[i];vv+=w[i]*w[i]*vol[i]*vol[i];}
+      const sd=Math.sqrt(vv)+1e-9;for(let i=0;i<N;i++){const g=(mu[i]*sd-a*w[i]*vol[i]*vol[i]/sd)/vv;w[i]=Math.max(0,w[i]+0.4*g);}
+      let s=w.reduce((x,y)=>x+y,0)||1;for(let i=0;i<N;i++)w[i]/=s;}return w;}
+  const wD=opt(muDir),wF=opt(muFac);
+  const oos=w=>{let a=0,vv=0;for(let i=0;i<N;i++){a+=trueMu[i]*w[i];vv+=w[i]*w[i]*vol[i]*vol[i];}return a/Math.sqrt(vv)*Math.sqrt(252);};
+  return [oos(wD),oos(wF)];}
+function el(t,a,x){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(x!=null)e.textContent=x;return e;}
+function drawCurve(Ns,dd,ff,curN,cd,cf){
+  const svg=document.getElementById("curve");while(svg.firstChild)svg.removeChild(svg.firstChild);
+  const W=640,H=320,ml=48,mr=16,mt=16,mb=40;const pw=W-ml-mr,ph=H-mt-mb;
+  const all=dd.concat(ff);const ymax=Math.max(...all)*1.08,ymin=Math.min(...all)*0.9;
+  const X=n=>ml+pw*((n-5)/55),Y=y=>mt+ph*(1-(y-ymin)/(ymax-ymin));
+  for(let g=0;g<=6;g++){const yv=ymin+(ymax-ymin)*g/6,y=Y(yv);
+    svg.appendChild(el("line",{x1:ml,y1:y,x2:W-mr,y2:y,stroke:GRID,"stroke-width":0.6}));
+    svg.appendChild(el("text",{x:ml-5,y:y+3,"text-anchor":"end","font-size":9,fill:GREY},yv.toFixed(2)));}
+  svg.appendChild(el("line",{x1:ml,y1:mt,x2:ml,y2:mt+ph,stroke:INK,"stroke-width":0.8}));
+  svg.appendChild(el("line",{x1:ml,y1:mt+ph,x2:W-mr,y2:mt+ph,stroke:INK,"stroke-width":0.8}));
+  for(let n=10;n<=60;n+=10){svg.appendChild(el("text",{x:X(n),y:mt+ph+16,"text-anchor":"middle","font-size":9,fill:GREY},n+""));}
+  const path=(xs,ys,col)=>{let d="";xs.forEach((n,i)=>{d+=(i?"L":"M")+X(n)+" "+Y(ys[i])+" ";});
+    svg.appendChild(el("path",{d,fill:"none",stroke:col,"stroke-width":1.6}));
+    xs.forEach((n,i)=>svg.appendChild(el("circle",{cx:X(n),cy:Y(ys[i]),r:2,fill:col})));};
+  path(Ns,dd,SLATE);path(Ns,ff,BRICK);
+  svg.appendChild(el("circle",{cx:X(curN),cy:Y(cd),r:5,fill:SLATE,stroke:INK,"stroke-width":1}));
+  svg.appendChild(el("circle",{cx:X(curN),cy:Y(cf),r:5,fill:BRICK,stroke:INK,"stroke-width":1}));
+  svg.appendChild(el("text",{x:W-mr-4,y:Y(dd[dd.length-1])+14,"text-anchor":"end","font-size":10,fill:SLATE},"direct estimation"));
+  svg.appendChild(el("text",{x:W-mr-4,y:Y(ff[ff.length-1])-8,"text-anchor":"end","font-size":10,fill:BRICK},"factor structure"));
+  svg.appendChild(el("text",{x:W/2,y:H-4,"text-anchor":"middle","font-size":9,fill:GREY},"number of assets N"));
+  svg.appendChild(el("text",{x:14,y:H/2,"text-anchor":"middle","font-size":9,fill:GREY,transform:`rotate(-90 14 ${H/2})`},"out-of-sample Sharpe"));
+}
+function run(){
+  const N=+NEl.value,T=+TEl.value,M=+MEl.value;
+  Nv.textContent=N;Tv.textContent=T;Mv.textContent=M;dpar.textContent=N;
+  let d=0,f=0;for(let m=0;m<M;m++){const [a,b]=trial(N,T,m*131+7);d+=a;f+=b;}d/=M;f/=M;
+  document.getElementById("dsr").textContent=d.toFixed(2);
+  document.getElementById("fsr").textContent=f.toFixed(2);
+  const Ns=[],dd=[],ff=[];const mm=Math.min(M,50);
+  for(let n=5;n<=60;n+=3){let da=0,fa=0;for(let m=0;m<mm;m++){const [a,b]=trial(n,T,m*131+7);da+=a;fa+=b;}Ns.push(n);dd.push(da/mm);ff.push(fa/mm);}
+  drawCurve(Ns,dd,ff,N,d,f);
+}
+const NEl=document.getElementById("N"),TEl=document.getElementById("T"),MEl=document.getElementById("M");
+[NEl,TEl,MEl].forEach(e=>e.addEventListener("input",run));run();
+</script>
+</body></html>

@@ -1,4 +1,3 @@
-
 # fbpo , Factor-Based Portfolio Optimization
 
 Independent reproduction and extension of **Auh, J.K. & Cho, W. (2023),
@@ -53,6 +52,52 @@ uv run pytest -q                                     # 130+ tests
 Every result artifact lands in `reports/`, named by the config hash so it is
 self-identifying. Bit-reproducible on a fixed BLAS thread count; see
 `reports/env_fingerprint.json`.
+
+
+## Results at a glance
+
+### Cumulative performance
+
+![Equity curves](docs/01_equity.png)
+
+### Out-of-sample return distributions
+
+![Return distributions](docs/02_distributions.png)
+
+### Risk and return
+
+![Risk-return](docs/03_risk_return.png)
+
+### Factor-model alpha
+
+![Attribution](docs/04_attribution.png)
+
+### Concentration and cost
+
+![Concentration and cost](docs/06_concentration_cost.png)
+
+### Alpha per unit of trading
+
+![Turnover vs alpha](docs/07_turnover_alpha.png)
+
+### The 13-signal panel
+
+![Signal panel](docs/09_signal_panel.png)
+
+### Vasicek beta shrinkage
+
+![Beta shrinkage](docs/10_beta_shrinkage.png)
+
+### The premium forecast
+
+![Forecast series](docs/11_forecast_series.png)
+
+## Interactive simulations
+
+- [Estimation error and the corner solution](docs/sim1_estimation_error.html)
+- [Factor structure versus direct estimation](docs/sim2_factor_vs_direct.html)
+
+*(Simulations run in-browser. Download and open, or enable GitHub Pages to make them live.)*
 
 ## Layout
 

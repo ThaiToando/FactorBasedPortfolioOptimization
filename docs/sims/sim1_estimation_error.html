@@ -1,0 +1,155 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Simulation 1 — Estimation error and the corner solution</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lm-webfont@0.5.0/latinmodern-roman.css">
+<style>
+body{background:#fff;color:#111;
+  font-family:"Latin Modern Roman","Computer Modern Roman",
+    "Nimbus Roman","Times New Roman",Times,serif;
+  font-size:17px;line-height:1.5;margin:0;padding:56px 0 90px;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;}
+.paper{max-width:640px;margin:0 auto;padding:0 28px;}
+.titleblock{text-align:center;margin-bottom:26px;}
+.titleblock .kicker{font-size:15px;font-style:italic;color:#333;margin-bottom:10px;}
+h1.title{font-size:25px;font-weight:400;line-height:1.25;margin:0 0 10px;}
+.byline{font-size:15px;color:#333;font-style:italic;}
+.byline .date{font-style:normal;color:#555;}
+hr.top{border:0;border-top:0.5px solid #111;margin:22px auto;width:88%;}
+.abstract{font-size:15px;line-height:1.5;margin:0 auto 26px;max-width:88%;
+  text-align:justify;}
+.abstract b{font-weight:700;}
+h2.section{font-size:17px;font-weight:700;margin:26px 0 8px;font-variant:normal;}
+.secnum{margin-right:.5em;}
+p{text-align:justify;margin:12px 0;}
+.controls{display:flex;gap:26px;flex-wrap:wrap;align-items:flex-end;
+  margin:18px 0 10px;font-size:14px;}
+.ctl label{display:block;color:#333;font-style:italic;margin-bottom:5px;font-size:13.5px;}
+.ctl output{color:#111;font-weight:700;margin-left:6px;
+  font-family:"Latin Modern Roman",Times,serif;}
+input[type=range]{width:190px;accent-color:#7a1d10;vertical-align:middle;}
+.stat{display:flex;gap:34px;flex-wrap:wrap;margin:16px 0 6px;
+  border-top:0.5px solid #ccc;border-bottom:0.5px solid #ccc;padding:10px 0;}
+.stat .k{font-size:12.5px;color:#555;font-style:italic;}
+.stat .v{font-size:23px;font-weight:400;
+  font-family:"Latin Modern Roman",Times,serif;}
+.panels{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:14px 0;}
+.panel{border:0.5px solid #bbb;padding:6px;}
+.panel.wide{grid-column:1/-1;}
+.phead{text-align:center;font-style:italic;font-size:13.5px;margin-bottom:2px;}
+.phead.d{color:#4E6E8E;}.phead.f{color:#7a1d10;}
+.pnum{text-align:center;font-size:27px;
+  font-family:"Latin Modern Roman",Times,serif;}
+.psub{text-align:center;font-size:12.5px;color:#555;font-style:italic;}
+.caption{font-size:14px;text-align:center;margin:8px auto 4px;max-width:92%;}
+.caption b{font-weight:700;}
+.discussion{font-size:15px;}
+.eq{font-style:italic;}
+sub{font-size:.75em;}
+footer{font-size:12.5px;color:#777;margin-top:34px;font-style:italic;
+  text-align:center;border-top:0.5px solid #ccc;padding-top:12px;}
+svg{width:100%;height:auto;display:block;
+  font-family:"Latin Modern Roman",Times,serif;}
+@media(max-width:680px){.panels{grid-template-columns:1fr;}}
+</style></head><body><div class="paper">
+<div class="titleblock">
+  <div class="kicker">Interactive Simulation 1</div>
+  <h1 class="title">Estimation error and the corner solution</h1>
+  <div class="byline">A reproduction of Auh &amp; Cho (2023) &nbsp;·&nbsp; <span class="date">Economics Letters 228, 111137</span></div>
+</div>
+<hr class="top">
+<p class="abstract"><b>Abstract.</b> Mean–variance optimization requires expected returns as input, and estimating them from historical means injects noise of the same order as the means themselves (Merton, 1980). This note makes the consequence visible. As estimation noise rises, the long-only maximum-Sharpe optimizer abandons diversification and allocates to whichever asset’s <em>error</em> happened to look most attractive — the corner solution that the factor structure of Auh and Cho (2023) is designed to avoid.</p>
+<div class="controls">
+  <div class="ctl"><label>Estimation noise &sigma; (bps/day)</label><input id="noise" type="range" min="0" max="50" value="0" step="1"><output id="noisev">0</output></div>
+  <div class="ctl"><label>Number of assets N</label><input id="nass" type="range" min="5" max="29" value="15" step="1"><output id="nassv">15</output></div>
+  <div class="ctl"><label>Resample</label><input id="seed" type="range" min="0" max="40" value="0" step="1"><output id="seedv">0</output></div>
+</div>
+<div class="stat">
+  <div><div class="k">Herfindahl index</div><div class="v" id="hhi">&mdash;</div></div>
+  <div><div class="k">Maximum weight</div><div class="v" id="maxw">&mdash;</div></div>
+  <div><div class="k">Believed Sharpe</div><div class="v" id="bel">&mdash;</div></div>
+  <div><div class="k">Realised Sharpe</div><div class="v" id="real">&mdash;</div></div>
+</div>
+<div class="panels">
+  <div class="panel"><svg id="weights" viewBox="0 0 400 300"></svg></div>
+  <div class="panel"><svg id="frontier" viewBox="0 0 400 300"></svg></div>
+</div>
+<p class="caption"><b>Figure 1.</b> Left: optimal portfolio weights. Right: the Sharpe ratio the optimizer believes it has achieved, against the Sharpe those same weights realise on the true means, as estimation noise increases. At &sigma;&nbsp;=&nbsp;0 the two coincide; the gap that opens as noise rises is estimation error, priced.</p>
+<h2 class="section"><span class="secnum">1.</span>Discussion</h2>
+<p class="discussion">The believed Sharpe is what the optimizer reports using its noisy estimate of <span class="eq">&mu;</span>; the realised Sharpe is what the chosen weights earn on the true means. Their divergence is the cost of treating an estimate as truth. The factor approach, <span class="eq">&mu;<sub>i</sub> = r<sub>f</sub> + &beta;<sub>i</sub>&thinsp;&pi;</span>, replaces the N noisy means with a single premium <span class="eq">&pi;</span> and N persistent betas, and so does not corner.</p>
+<footer>This simulation runs entirely in the browser with no external computation. For research and educational use only; not investment advice.</footer>
+</div>
+<script>
+const INK="#1A1A1A",BRICK="#B5341A",SLATE="#4E6E8E",GREY="#9A9A9A",GRID="#E4E4E4",NS="http://www.w3.org/2000/svg";
+function rng(s){return function(){s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function gauss(r){let u=0,v=0;while(!u)u=r();while(!v)v=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);}
+function maxSharpe(mu,vol){const n=mu.length;let w=new Array(n).fill(1/n);
+  for(let it=0;it<400;it++){let mv=0,vv=0,sw=0;for(let i=0;i<n;i++){mv+=mu[i]*w[i];vv+=w[i]*w[i]*vol[i]*vol[i];sw+=w[i];}
+    vv+=0.6*Math.pow(sw*0.008,2);const sd=Math.sqrt(vv)+1e-9;
+    for(let i=0;i<n;i++){const g=(mu[i]*sd-mv*(w[i]*vol[i]*vol[i]+0.6*0.008*0.008*sw)/sd)/vv;w[i]+=0.5*g;}
+    for(let i=0;i<n;i++)w[i]=Math.max(0,w[i]);let s=w.reduce((a,b)=>a+b,0)||1;for(let i=0;i<n;i++)w[i]/=s;}
+  return w;}
+function el(tag,attrs,txt){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(txt!=null)e.textContent=txt;return e;}
+function clear(svg){while(svg.firstChild)svg.removeChild(svg.firstChild);}
+function axes(svg,x0,y0,x1,y1){ // draw L-frame
+  svg.appendChild(el("line",{x1:x0,y1:y0,x2:x0,y2:y1,stroke:INK,"stroke-width":0.8}));
+  svg.appendChild(el("line",{x1:x0,y1:y1,x2:x1,y2:y1,stroke:INK,"stroke-width":0.8}));}
+
+function drawWeights(w){
+  const svg=document.getElementById("weights");clear(svg);
+  const W=400,H=300,ml=34,mr=10,mt=24,mb=30,n=w.length;
+  const pw=W-ml-mr,ph=H-mt-mb;
+  // gridlines + y labels 0..100
+  for(let g=0;g<=100;g+=25){const y=mt+ph*(1-g/100);
+    svg.appendChild(el("line",{x1:ml,y1:y,x2:W-mr,y2:y,stroke:GRID,"stroke-width":0.6}));
+    svg.appendChild(el("text",{x:ml-4,y:y+3,"text-anchor":"end","font-size":8,fill:GREY},g+""));}
+  axes(svg,ml,mt,W-mr,mt+ph);
+  const bw=pw/n*0.8;
+  w.forEach((v,i)=>{const x=ml+pw*(i/n)+pw/n*0.1,h=ph*Math.min(v,1);
+    svg.appendChild(el("rect",{x,y:mt+ph-h,width:bw,height:h,
+      fill:v>0.15?BRICK:SLATE,stroke:INK,"stroke-width":0.5}));});
+  svg.appendChild(el("text",{x:W/2,y:16,"text-anchor":"middle","font-size":11,"font-weight":"bold",fill:INK},"Optimal weights (%)"));
+  svg.appendChild(el("text",{x:W/2,y:H-6,"text-anchor":"middle","font-size":8,fill:GREY},"asset"));
+}
+function drawFrontier(xs,bel,re,curX,curB,curR){
+  const svg=document.getElementById("frontier");clear(svg);
+  const W=400,H=300,ml=38,mr=14,mt=24,mb=32;const pw=W-ml-mr,ph=H-mt-mb;
+  const ymax=Math.max(2.5,Math.max(...bel)*1.05),ymin=0;
+  const X=x=>ml+pw*(x/50),Y=y=>mt+ph*(1-(y-ymin)/(ymax-ymin));
+  for(let g=0;g<=Math.ceil(ymax);g++){const y=Y(g);
+    svg.appendChild(el("line",{x1:ml,y1:y,x2:W-mr,y2:y,stroke:GRID,"stroke-width":0.6}));
+    svg.appendChild(el("text",{x:ml-4,y:y+3,"text-anchor":"end","font-size":8,fill:GREY},g+""));}
+  axes(svg,ml,mt,W-mr,mt+ph);
+  const path=(arr,col)=>{let d="";arr.forEach((y,i)=>{d+=(i?"L":"M")+X(xs[i])+" "+Y(y)+" ";});
+    svg.appendChild(el("path",{d,fill:"none",stroke:col,"stroke-width":1.6}));};
+  path(bel,SLATE);path(re,BRICK);
+  svg.appendChild(el("circle",{cx:X(curX),cy:Y(curB),r:4,fill:SLATE,stroke:INK,"stroke-width":0.8}));
+  svg.appendChild(el("circle",{cx:X(curX),cy:Y(curR),r:4,fill:BRICK,stroke:INK,"stroke-width":0.8}));
+  svg.appendChild(el("text",{x:W-mr,y:Y(bel[bel.length-1])-4,"text-anchor":"end","font-size":9,fill:SLATE},"believed"));
+  svg.appendChild(el("text",{x:W-mr,y:Y(re[re.length-1])+10,"text-anchor":"end","font-size":9,fill:BRICK},"realised"));
+  svg.appendChild(el("text",{x:W/2,y:16,"text-anchor":"middle","font-size":11,"font-weight":"bold",fill:INK},"Believed vs realised Sharpe"));
+  svg.appendChild(el("text",{x:W/2,y:H-6,"text-anchor":"middle","font-size":8,fill:GREY},"estimation noise σ (bps/day)"));
+}
+function run(){
+  const noise=+noiseEl.value/10000,N=+nassEl.value,seed=+seedEl.value;
+  noisev.textContent=(noise*10000).toFixed(0);nassv.textContent=N;seedv.textContent=seed;
+  function build(nz,sd){const r=rng(sd*7919+13);const tm=[],vl=[];
+    for(let i=0;i<N;i++){tm.push(0.0004+gauss(r)*0.0002);vl.push(0.010+Math.abs(gauss(r))*0.004);}
+    const em=tm.map(m=>m+gauss(r)*nz);const w=maxSharpe(em,vl);
+    const sr=mu=>{let mv=0,vv=0,sw=0;for(let i=0;i<N;i++){mv+=mu[i]*w[i];vv+=w[i]*w[i]*vl[i]*vl[i];sw+=w[i];}
+      vv+=0.6*Math.pow(sw*0.008,2);return mv/Math.sqrt(vv)*Math.sqrt(252);};
+    return {w,bel:sr(em),re:sr(tm)};}
+  const cur=build(noise,seed);
+  const hhi=cur.w.reduce((a,b)=>a+b*b,0),maxw=Math.max(...cur.w);
+  document.getElementById("hhi").textContent=hhi.toFixed(3);
+  document.getElementById("maxw").textContent=(maxw*100).toFixed(0)+"%";
+  document.getElementById("bel").textContent=cur.bel.toFixed(2);
+  const rel=document.getElementById("real");rel.textContent=cur.re.toFixed(2);
+  rel.style.color=cur.re<cur.bel-0.15?BRICK:INK;
+  drawWeights(cur.w);
+  const xs=[],bel=[],re=[];for(let k=0;k<=50;k+=2){const b=build(k/10000,seed);xs.push(k);bel.push(b.bel);re.push(b.re);}
+  drawFrontier(xs,bel,re,noise*10000,cur.bel,cur.re);
+}
+const noiseEl=document.getElementById("noise"),nassEl=document.getElementById("nass"),seedEl=document.getElementById("seed");
+[noiseEl,nassEl,seedEl].forEach(e=>e.addEventListener("input",run));run();
+</script>
+</body></html>
