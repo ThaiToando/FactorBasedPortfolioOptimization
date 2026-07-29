@@ -1,4 +1,4 @@
-result.
+
 
 # fbpo , Factor-Based Portfolio Optimization
 
@@ -8,7 +8,9 @@ Independent reproduction and extension of **Auh, J.K. & Cho, W. (2023),
 
 Research and educational purposes only. **Not investment advice.**
 
+
 ---
+
 
 ## What this is
 
@@ -161,7 +163,7 @@ Both run entirely client-side, no install required as you just need to click.
 
 ### I &middot; Estimation error and the corner solution
 
-**[&rarr; Launch simulation](https://thaitoando.github.io/FactorBasedPortfolioOptmization/sims/sim1_estimation_error.html)**
+**[&rarr; Launch simulation](https://thaitoando.github.io/FactorBasedPortfolioOptimization/sims/sim1_estimation_error.html)**
 
 Drag the estimation-noise slider and watch the maximum-Sharpe optimizer abandon
 diversification. As noise rises, the weights collapse into a corner, the
@@ -172,7 +174,7 @@ entire thesis made tactile.
 
 ### II &middot; Factor structure versus direct estimation
 
-**[&rarr; Launch simulation](https://thaitoando.github.io/FactorBasedPortfolioOptmization/sims/sim2_factor_vs_direct.html)**
+**[&rarr; Launch simulation](https://thaitoando.github.io/FactorBasedPortfolioOptimization/sims/sim2_factor_vs_direct.html)**
 
 Run direct estimation and the factor structure on the same synthetic universe,
 out of sample, as the universe grows. Direct estimation must fit *N* noisy means
