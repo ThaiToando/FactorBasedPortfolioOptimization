@@ -156,12 +156,12 @@ which is why the ML portfolio extension adds nothing the historical mean did not
 
 ## Interactive simulations
 
-Two browser-based simulations that let you turn the paper's knobs directly. Both run entirely client-side with no dependencies as you just fdownload and open in any browser, or enable GitHub Pages (Settings &rarr; Pages &rarr; Deploy from branch
-&rarr; `main` / `/docs`) to make them live
+Two browser-based simulations that let you turn the paper's knobs directly.
+Both run entirely client-side, no install required as you just need to click.
 
 ### I &middot; Estimation error and the corner solution
 
-**[&rarr; Launch simulation](docs/sims/sim1_estimation_error.html)**
+**[&rarr; Launch simulation](https://thaitoando.github.io/FactorBasedPortfolioOptmization/sims/sim1_estimation_error.html)**
 
 Drag the estimation-noise slider and watch the maximum-Sharpe optimizer abandon
 diversification. As noise rises, the weights collapse into a corner, the
@@ -172,7 +172,7 @@ entire thesis made tactile.
 
 ### II &middot; Factor structure versus direct estimation
 
-**[&rarr; Launch simulation](docs/sims/sim2_factor_vs_direct.html)**
+**[&rarr; Launch simulation](https://thaitoando.github.io/FactorBasedPortfolioOptmization/sims/sim2_factor_vs_direct.html)**
 
 Run direct estimation and the factor structure on the same synthetic universe,
 out of sample, as the universe grows. Direct estimation must fit *N* noisy means
